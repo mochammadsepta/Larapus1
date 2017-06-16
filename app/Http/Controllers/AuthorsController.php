@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Author;
 use Yajra\Datatables\Html\Builder;
 use Yajra\Datatables\Datatables;
+use Session;
 
 class AuthorsController extends Controller
 {
@@ -16,11 +17,21 @@ class AuthorsController extends Controller
      */
     public function index(Request $request, Builder $htmlBuilder)
     {
-        if ($request->ajax()){
+        if ($request->ajax()) {
             $authors = Author::select(['id','name']);
-            return Datatables::of($authors)->make(true);
+            return Datatables::of($authors)
+            ->addColumn('action', function($author){
+                return view('datatable._action', [
+                    'model'             =>$author,
+                    'form_url'          =>route('authors.destroy', $author->id), 
+                    'edit_url'          => route('authors.edit', $author->id),
+                    'confirm_message'   =>'Yakin ingin menghapus'.$author->name.' ? '
+                    ]);
+            })->make(true);
         }
-        $html = $htmlBuilder->addColumn(['data'=>'name','name'=>'name','title'=>'Nama']);
+        $html = $htmlBuilder
+        ->addColumn(['data'=>'name','name'=>'name','title'=>'Nama'])
+        ->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'','orderable'=>false,'\searchable'=>false ]);
         return view('authors.index')->with(compact('html'));
     }
 
@@ -44,6 +55,10 @@ class AuthorsController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,['name'=>'required|unique:authors']);
+        $author = Author::create($request->only('name'));
+        Session::flash("flash_notification", ["level"=>"success", "message"=>"Berhasil menyimpan $author->name"]);
+        return redirect()->route('authors.index');
     }
 
     /**
@@ -66,6 +81,8 @@ class AuthorsController extends Controller
     public function edit($id)
     {
         //
+        $author = Author::find($id);
+        return view('authors.edit')->with(compact('author'));
     }
 
     /**
@@ -78,6 +95,11 @@ class AuthorsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, ['name'=>'required|unique:authors,name,'.$id]);
+        $author = Author::find($id);
+        $author->update($request->only('name'));
+        Session::flash("flash_notification", ["level"=>"success", "message"=>"berhasil menyimpan $author->name"]);
+        return redirect()->route('authors.index');
     }
 
     /**
@@ -89,5 +111,8 @@ class AuthorsController extends Controller
     public function destroy($id)
     {
         //
+       if (! Author::destroy($id)) return redirect()->back();
+        Session::flash("flash_notification", ["level"=>"success","message"=>"Penulis berhasil dihapus"]);
+        return redirect()->route('authors.index');
     }
 }
