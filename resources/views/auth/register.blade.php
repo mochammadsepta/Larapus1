@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-succes">
+            <div class="panel panel-primary">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
                     {!! Form::open(['url'=>'/register', 'class'=>'form-horizontal']) !!}
@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
-                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-log-in"> </span>
+                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-log-in"> </span>
                                 <i class="fa fa-btn fa-user"></i>Daftar
                             </button>
                         </div>

@@ -330,6 +330,7 @@ class ComposerStaticInitb66e8af32941232b5d742175a5f02b20
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\AuthorsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthorsController.php',
+        'App\\Http\\Controllers\\BooksController' => __DIR__ . '/../..' . '/app/Http/Controllers/BooksController.php',
         'App\\Http\\Controllers\\CobaController' => __DIR__ . '/../..' . '/app/Http/Controllers/CobaController.php',
         'App\\Http\\Controllers\\CobaaController' => __DIR__ . '/../..' . '/app/Http/Controllers/CobaaController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
