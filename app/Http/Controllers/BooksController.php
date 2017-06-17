@@ -14,6 +14,7 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\BorrowLog;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\BookException;
 
 class BooksController extends Controller
 {
@@ -174,14 +175,15 @@ class BooksController extends Controller
     public function borrow($id)
     {
         try {
-            $book=Book::findOrFail($id);
-            BorrowLog::create([
-                'user_id'=>Auth::user()->id,
-                'book_id'=>$id
-            ]);
+            $book = Book::findOrFail($id);
+            Auth::user()->borrow($book);
             Session::flash("flash_notification", [
             "level"=>"success",
             "message"=>"Berhasil Meminjam $book->title" ]);
+         } catch(BookException $e) {
+            Session::flash("flash_notification", [
+            "level"=>"danger",
+            "message"=> $e->getMessage() ]);
         } catch(FileNotFoundException $e) {
             Session::flash("flash_notification", [
             "level"=>"danger",
