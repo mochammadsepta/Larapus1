@@ -16,13 +16,19 @@
                             <tr>
                                 <td class="text-muted">Buku Dipinjam</td>
                                 <td>
-                                    @if ($borrowLogs->count() == 0)
-                                    Tidak ada buku yang dipinjam
+                                   @if ($borrowLogs->count()==0)
+                                    Tidak Ada Buku Yang Dipinjam
                                     @endif
                                     <ul>
                                         @foreach ($borrowLogs as $borrowLog)
-                                        <li>{{ $borrowLog->book->title }}</li>
-                                        @endforeach
+                                        <li>
+                                            {!! Form::open(['url'=>route('member.books.return', $borrowLog->book_id), 'method'=>'put', 'class'=>'form-inline js-confirm', 'data-confirm'=>"Anda Yakin Hendak Mengembalikan ".$borrowLog->book->title." ?"]) !!}
+                                            {!! Form::submit('Kembalikan',['class'=>'btn btn-xs btn-default']) !!}
+                                            {{ $borrowLog->book->title }}
+                                            
+                                            {!! Form::close() !!}
+                                        </li>
+@endforeach
                                     </ul>
                                 </td>
                             </tr>
